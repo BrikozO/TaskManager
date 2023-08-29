@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+    {% if current_user.is_authenticated %}
+    {{  wtf.quick_form(form) }}
+    {% else %}
+        <p>This is a task-manager! To work with it, you should login or signup!</p>
+    {% endif %}
+    {% if tasks %}
+        {% for task in tasks %}
+        <p>
+            {{ task.task }}
+            {{ task.expire_date }}
+        </p>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
