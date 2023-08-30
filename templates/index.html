@@ -10,8 +10,10 @@
     {% if tasks %}
         {% for task in tasks %}
         <p>
-            {{ task.task }}
-            {{ task.expire_date }}
+            {{ task.task }}|
+            Expire after:
+            {{ task.expire_date.strftime("%d %B %Y, %A") }}|
+            <a href="{{ url_for('delete_task', task_id=task.id) }}">Delete this task</a>
         </p>
         {% endfor %}
     {% endif %}

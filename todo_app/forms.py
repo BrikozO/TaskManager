@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField
 from wtforms.validators import DataRequired, Length
 
+from .forms_custom_validators import DateCheck
+
 
 class UserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -11,5 +13,5 @@ class UserForm(FlaskForm):
 
 class TaskForm(FlaskForm):
     task = StringField('Task', validators=[DataRequired(), Length(min=8, max=256)])
-    expire_date = DateField('Expire Date', validators=[DataRequired()])
+    expire_date = DateField('Expire Date', validators=[DataRequired(), DateCheck()])
     submit = SubmitField('Submit')

@@ -1,7 +1,7 @@
-from todo_app import app, login, db
 from flask import render_template, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user
 
+from todo_app import app, login, db
 from .forms import UserForm, TaskForm
 from .models import User, Task
 
@@ -20,6 +20,15 @@ def mainpage():  # put application's code here
         flash('Task succesfully added!')
         return redirect(url_for('mainpage'))
     return render_template('index.html', form=form, tasks=tasks)
+
+
+@app.route('/<int:task_id>')
+def delete_task(task_id):
+    task = Task.query.get(task_id)
+    db.session.delete(task)
+    db.session.commit()
+    flash('Task succesfully deleted!')
+    return redirect(url_for('mainpage'))
 
 
 @login.user_loader
