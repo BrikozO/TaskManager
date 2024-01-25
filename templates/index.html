@@ -1,20 +1,43 @@
 {% extends 'base.html' %}
-{% import 'bootstrap/wtf.html' as wtf %}
+{% from "bootstrap5/form.html" import render_form %}
 
 {% block content %}
+    {% if tasks %}
+        {% if tasks.count() > 0  %}
+            <h2>Currently tasks: </h2>
+            <table class="table mb-3">
+            <thead>
+                <tr>
+                  <th scope="col">№.</th>
+                  <th scope="col">Task</th>
+                  <th scope="col">Expire After</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+            <tbody>
+            {% for task in tasks %}
+            <tr>
+                <th scope="row">{{ loop.index }}
+                <td>{{ task.task }}</td>
+                {% if task.is_expired %}
+                    <td  style="color: red">This task is already expired!</td>
+                {% else %}
+                <td>Expire after:
+                    {{ task.expire_date.strftime("%d %B %Y, %A") }}</td>
+                {% endif %}
+                <td><a class="btn btn-danger" href="{{ url_for('delete_task', task_id=task.id) }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        {% else %}
+            <p>You don't have any task at the moment! Do u want to add any new ones?</p>
+        {% endif %}
+    {% endif %}
     {% if current_user.is_authenticated %}
-    {{  wtf.quick_form(form) }}
+    <h3>Add new task: </h3>
+    {{  render_form(form) }}
     {% else %}
         <p>This is a task-manager! To work with it, you should login or signup!</p>
-    {% endif %}
-    {% if tasks %}
-        {% for task in tasks %}
-        <p>
-            {{ task.task }}|
-            Expire after:
-            {{ task.expire_date.strftime("%d %B %Y, %A") }}|
-            <a href="{{ url_for('delete_task', task_id=task.id) }}">Delete this task</a>
-        </p>
-        {% endfor %}
     {% endif %}
 {% endblock %}

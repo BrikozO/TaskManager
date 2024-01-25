@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% import 'bootstrap/wtf.html' as wtf %}
+{% from "bootstrap5/form.html" import render_form %}
 
 {% block content %}
     <p>Login: </p>
-    {{  wtf.quick_form(form) }}
+    {{  render_form(form) }}
 {% endblock %}
