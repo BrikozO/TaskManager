@@ -23,7 +23,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(256), index=True)
     expire_date = db.Column(db.DateTime)
-
+    is_expired = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):

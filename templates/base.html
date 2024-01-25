@@ -2,32 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% if title %}{{ title }}{% else %}ToDo APP {% endif %}</title>
+    <title>{% if title %}{{ title }}{% else %}Task Manager{% endif %}</title>
+    {{ bootstrap.load_css() }}
 </head>
 <body>
-    <a href="{{ url_for('mainpage') }}">Main page</a>
-    {% if current_user.is_anonymous %}
-    <p>
-        <a href="{{ url_for('login') }}">Log In</a>
-        or
-        <a href="{{ url_for('signup') }}">Sign Up</a>
-    </p>
-    {% else %}
-    <p>Hi, {{ current_user.username }}!
-        <a href="{{ url_for('logout') }}">Log out</a>
-    </p>
-    {% endif %}
-    <hr>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    {% endwith %}
-    {% block content %}
-    {% endblock %}
+<section class="vh-100" style="background-color: #eee;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card rounded-3">
+          <div class="card-body p-4">
+
+            <h4 class="text-center my-3 pb-3">Task Manager</h4>
+            {% if request.path != "/" %}
+            <a href="{{ url_for('mainpage') }}">Main page</a>
+            {% endif %}
+            {% if current_user.is_anonymous %}
+            <p>
+                <a href="{{ url_for('login') }}">Log In</a>
+                or
+                <a href="{{ url_for('signup') }}">Sign Up</a>
+            </p>
+            {% else %}
+            <p>Hi, {{ current_user.username }}!
+                <a href="{{ url_for('logout') }}">Log out</a>
+            </p>
+            {% endif %}
+            <hr>
+            {% with errors = get_flashed_messages(category_filter=['error']) %}
+                {% if errors %}
+                <ul>
+                        {% for message in errors %}
+                        <li style="color: red">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            {% with messages = get_flashed_messages(category_filter=['notice']) %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li style="color: green">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}
+            {% block content %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 </body>
 </html>
